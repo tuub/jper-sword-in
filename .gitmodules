@@ -4,3 +4,6 @@
 [submodule "magnificent-octopus"]
 	path = magnificent-octopus
 	url = https://github.com/richard-jones/magnificent-octopus
+[submodule "Simple-Sword-Server"]
+	path = Simple-Sword-Server
+	url = https://github.com/swordapp/Simple-Sword-Server.git
