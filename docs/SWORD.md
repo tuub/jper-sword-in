@@ -1,4 +1,4 @@
-# JPER SWORDv2 Deposit Endpoing
+# JPER SWORDv2 Deposit Endpoint
 
 This document describes the SWORDv2 deposit protocol operations supported by JPER.
 
