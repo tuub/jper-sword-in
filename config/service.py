@@ -15,9 +15,7 @@ ELASTIC_SEARCH_INDEX = "db"
 ELASTIC_SEARCH_VERSION = "1.4.4"
 
 # Classes from which to retrieve ES mappings to be used in this application
-ELASTIC_SEARCH_MAPPINGS = [
-    "service.dao.MyDAO"
-]
+ELASTIC_SEARCH_MAPPINGS = []
 
 ############################################
 # important overrides for account module
