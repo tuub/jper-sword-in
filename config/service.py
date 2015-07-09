@@ -45,7 +45,7 @@ SWORDV2_SERVER_CONFIG = {
     # In this default configuration we use the built-in SSS repository's
     # implementations for everything
     "sword_server" : "service.sword.JperSword",
-    "authenticator" : "sss.repository.SSSAuthenticator",
+    "authenticator" : "service.sword.JperAuthenticator",
     "webui" : "sss.repository.WebInterface",
 
     ##############################################
@@ -117,6 +117,8 @@ SWORDV2_SERVER_CONFIG = {
     "container_format_default" : {
         "content_type" : "application/atom+xml;type=entry"
     },
+
+    "generator" : ("http://router.jisc.ac.uk", "2.0"),
 
     ##############################################
     # Default configuration for SSS repository impl - these are not used

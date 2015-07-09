@@ -1,10 +1,28 @@
-from sss.core import SwordServer, ServiceDocument, SDCollection
+from sss.core import SwordServer, ServiceDocument, SDCollection, SwordError, Authenticator, Auth, DepositResponse, EntryDocument
+from sss.spec import Errors
 from flask import url_for
+from octopus.modules.jper import client, models
+
+class JperAuth(Auth):
+
+    def __init__(self, username=None, on_behalf_of=None, password=None):
+        super(JperAuth, self).__init__(username=username, on_behalf_of=on_behalf_of)
+        self.password = password
+
+class JperAuthenticator(Authenticator):
+
+    def __init__(self, config):
+        super(JperAuthenticator, self).__init__(config)
+
+    def basic_authenticate(self, username, password, obo):
+        # we don't even attempt to auth the user, just let the
+        # JPER API do that
+        return JperAuth(username, obo, password)
 
 class JperSword(SwordServer):
 
     def __init__(self, config, auth):
-        SwordServer.__init__(self, config, auth)
+        super(JperSword, self).__init__(config, auth)
 
         # create a URIManager for us to use
         self.um = URIManager(self.configuration)
@@ -70,11 +88,62 @@ class JperSword(SwordServer):
         """
         Take the supplied deposit and treat it as a new container with content to be created in the specified collection
         Args:
-        -collection:    the ID of the collection to be deposited into
+        -path:    the ID of the collection to be deposited into
         -deposit:       the DepositRequest object to be processed
         Returns a DepositResponse object which will contain the Deposit Receipt or a SWORD Error
         """
-        raise NotImplementedError()
+        # make a notification that we can use to go along with the deposit
+        # it doesn't need to contain anything
+        notification = models.IncomingNotification()
+        notification.packaging_format = deposit.packaging
+
+        # instance of the jper client to communicate via
+        jper = client.JPER(api_key=deposit.auth.password)
+
+        # the deposit could be on the validate or the notify endpoint
+        receipt = None
+        loc = None
+        accepted = False
+        create = False
+        if path == "validate":
+            try:
+                jper.validate(notification, file_handle=deposit.content_file)
+            except client.ValidationException as e:
+                raise SwordError(error_uri=Errors.bad_request, msg=e.message, author="JPER", treatment="validation failed")
+            accepted = True
+        elif path == "notify":
+            try:
+                id, loc = jper.create_notification(notification, file_handle=deposit.content_file)
+                receipt = EntryDocument()
+                receipt.atom_id = self.um.atom_id(id)
+                receipt.content_uri = self.um.cont_uri(id)
+                receipt.edit_uri = self.um.edit_uri(id)
+                receipt.em_uris = [(self.um.em_uri(id), "application/zip")]
+                receipt.packaging = [deposit.packaging]
+                receipt.state_uris = [(self.um.state_uri(id, "atom"), "application/atom+xml;type=feed"), (self.um.state_uri(id, "rdf"), "application/rdf+xml")]
+                receipt.generator = self.configuration.generator
+                receipt.treatment = "Notification has been accepted for routing"
+                receipt.original_deposit_uri = self.um.em_uri(id)
+            except client.ValidationException as e:
+                raise SwordError(error_uri=Errors.bad_request, msg=e.message, author="JPER", treatment="validation failed")
+            create = True
+        else:
+            raise SwordError(status=404, empty=True)
+
+        # finally, assemble the deposit response and return
+        dr = DepositResponse()
+        if receipt is not None:
+            dr.receipt = receipt.serialise()
+        if loc is not None:
+            dr.location = loc
+
+        if accepted:
+            dr.accepted = True
+        elif create:
+            dr.created = True
+
+        return dr
+
 
     def get_media_resource(self, path, accept_parameters):
         """
@@ -166,6 +235,10 @@ class URIManager(object):
     """
     def __init__(self, config):
         self.configuration = config
+
+    def atom_id(self, id):
+        """ An ID to use for Atom Entries """
+        return "tag:container@jper/" + id
 
     def sd_uri(self):
         return self.configuration.base_url[:-1] + url_for("swordv2_server.service_document")
