@@ -8,5 +8,5 @@ dist/*
 local.cfg
 
 .idea/
-
+service/tests/sss_store/*
 
