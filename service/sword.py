@@ -1,4 +1,4 @@
-from sss.core import SwordServer, ServiceDocument, SDCollection, SwordError, Authenticator, Auth, DepositResponse, EntryDocument
+from sss.core import SwordServer, ServiceDocument, SDCollection, SwordError, Authenticator, Auth, DepositResponse, EntryDocument, Statement, MediaResourceResponse
 from sss.spec import Errors
 from flask import url_for
 from octopus.modules.jper import client, models
@@ -27,14 +27,29 @@ class JperSword(SwordServer):
         # create a URIManager for us to use
         self.um = URIManager(self.configuration)
 
+        # instance of the jper client to communicate via
+        self.jper = client.JPER(api_key=self.auth_credentials.password)
+
+        # a place to cache the notes we retrieve from the server
+        self.notes = {}
+
     ##############################################
     ## Methods required by the JPER integration
 
     def container_exists(self, path):
-        raise NotImplementedError()
+        return self._cache_notification(path)
 
     def media_resource_exists(self, path):
-        raise NotImplementedError()
+        cached = self._cache_notification(path)
+        if not cached:
+            return False
+
+        # get the note from the cache
+        note = self.notes[path]
+
+        # a note has a media resource if there is a content link associated with it
+        packs = note.get_urls(type="package")
+        return len(packs) > 0
 
     def service_document(self, path=None):
         """
@@ -108,22 +123,17 @@ class JperSword(SwordServer):
         if path == "validate":
             try:
                 jper.validate(notification, file_handle=deposit.content_file)
+            except client.JPERAuthException as e:
+                raise SwordError(status=401, empty=True)
             except client.ValidationException as e:
                 raise SwordError(error_uri=Errors.bad_request, msg=e.message, author="JPER", treatment="validation failed")
             accepted = True
         elif path == "notify":
             try:
                 id, loc = jper.create_notification(notification, file_handle=deposit.content_file)
-                receipt = EntryDocument()
-                receipt.atom_id = self.um.atom_id(id)
-                receipt.content_uri = self.um.cont_uri(id)
-                receipt.edit_uri = self.um.edit_uri(id)
-                receipt.em_uris = [(self.um.em_uri(id), "application/zip")]
-                receipt.packaging = [deposit.packaging]
-                receipt.state_uris = [(self.um.state_uri(id, "atom"), "application/atom+xml;type=feed"), (self.um.state_uri(id, "rdf"), "application/rdf+xml")]
-                receipt.generator = self.configuration.generator
-                receipt.treatment = "Notification has been accepted for routing"
-                receipt.original_deposit_uri = self.um.em_uri(id)
+                receipt = self._make_receipt(id, deposit.packaging, "Notification has been accepted for routing")
+            except client.JPERAuthException as e:
+                raise SwordError(status=401, empty=True)
             except client.ValidationException as e:
                 raise SwordError(error_uri=Errors.bad_request, msg=e.message, author="JPER", treatment="validation failed")
             create = True
@@ -144,27 +154,130 @@ class JperSword(SwordServer):
 
         return dr
 
-
     def get_media_resource(self, path, accept_parameters):
         """
         Get a representation of the media resource for the given id as represented by the specified content type
         -id:    The ID of the object in the store
         -content_type   A ContentType object describing the type of the object to be retrieved
         """
-        raise NotImplementedError()
+        cached = self._cache_notification(path)
+        if not cached:
+            raise SwordError(status=404, empty=True)
+
+        # get the note from the cache
+        note = self.notes[path]
+
+        # a note has a media resource if there is a content link associated with it
+        packs = note.get_urls(type="package")
+        if len(packs) == 0:
+            raise SwordError(status=404, empty=True)
+
+        mr = MediaResourceResponse()
+        mr.redirect = True
+        mr.url = packs[0]
+        return mr
 
     def get_container(self, path, accept_parameters):
         """
         Get a representation of the container in the requested content type
         Args:
-        -oid:   The ID of the object in the store
-        -content_type   A ContentType object describing the required format
+        -path:   The ID of the object in the store
+        -accept_parameters   An AcceptParameters object describing the required format
         Returns a representation of the container in the appropriate format
         """
-        raise NotImplementedError()
+        # by the time this is called, we should already know that we can return this type, so there is no need for
+        # any checking, we just get on with it
+
+        # pick either the deposit receipt or the pure statement to return to the client
+        if accept_parameters.content_type.mimetype() == "application/atom+xml;type=entry":
+            return self._get_deposit_receipt(path)
+        else:
+            return self.get_statement(path, accept_parameters.content_type.mimetype())
 
     def get_statement(self, path, type=None):
-        raise NotImplementedError()
+        if type is None:
+            type = "application/atom+xml;type=feed"
+
+        cached = self._cache_notification(path)
+        if not cached:
+            raise SwordError(status=404, empty=True)
+        note = self.notes[path]
+
+        # State information
+        state_uri = "http://router2.mimas.ac.uk/swordv2/state/pending"
+        state_description = "Notification has been accepted for routing"
+        ad = note.analysis_date
+        if ad is not None:
+            state_uri = "http://router2.mimas.ac.uk/swordv2/state/routed"
+            state_description = "Notification has been routed for appropriate repositories"
+
+        # the derived resources/provided links
+        derived_resources = [l.get("url") for l in note.links]
+
+        # the various urls
+        agg_uri = self.um.agg_uri(path)
+        edit_uri = self.um.edit_uri(path)
+        deposit_uri = self.um.cont_uri(path)
+
+        # depositing user
+        by = self.auth_credentials.username
+        obo = self.auth_credentials.on_behalf_of
+
+        # create the new statement
+        s = Statement()
+        s.aggregation_uri = agg_uri
+        s.rem_uri = edit_uri
+        s.original_deposit(deposit_uri, note.created_datestamp, note.packaging_format, by, obo)
+        s.add_state(state_uri, state_description)
+        s.aggregates = derived_resources
+
+        # now serve the relevant serialisation
+        if type == "application/rdf+xml":
+            return s.serialise_rdf()
+        elif type == "application/atom+xml;type=feed":
+            return s.serialise_atom()
+        else:
+            return None
+
+
+    #############################################
+    ## some internal methods
+
+    def _cache_notification(self, path):
+        # if we haven't got a cached copy, get one
+        if path not in self.notes:
+            note = self.jper.get_notification(notification_id=path)
+            if note is not None:
+                # cache the result
+                self.notes[path] = note
+            else:
+                return False
+        return True
+
+    def _make_receipt(self, id, packaging, treatment):
+        receipt = EntryDocument()
+        receipt.atom_id = self.um.atom_id(id)
+        receipt.content_uri = self.um.cont_uri(id)
+        receipt.edit_uri = self.um.edit_uri(id)
+        receipt.em_uris = [(self.um.em_uri(id), "application/zip")]
+        receipt.packaging = [packaging]
+        receipt.state_uris = [(self.um.state_uri(id, "atom"), "application/atom+xml;type=feed"), (self.um.state_uri(id, "rdf"), "application/rdf+xml")]
+        receipt.generator = self.configuration.generator
+        receipt.treatment = treatment
+        receipt.original_deposit_uri = self.um.em_uri(id)
+        return receipt
+
+    def _get_deposit_receipt(self, path):
+        cached = self._cache_notification(path)
+        if not cached:
+            raise SwordError(status=404, empty=True)
+        note = self.notes[path]
+        ad = note.analysis_date
+        treatment = "Notification has been accepted for routing"
+        if ad is not None:
+            treatment = "Notification has been routed for appropriate repositories"
+        receipt = self._make_receipt(note.id, note.packaging_format, treatment)
+        return receipt.serialise()
 
 
     #############################################
@@ -261,4 +374,7 @@ class URIManager(object):
 
     def state_uri(self, id, type):
         return self.configuration.base_url[:-1] + url_for("swordv2_server.statement", entry_id=id, type=type)
+
+    def agg_uri(self, id):
+        return "tag:aggregation@jper/" + id
 
