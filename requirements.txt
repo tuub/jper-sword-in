@@ -1,0 +1,15 @@
+# In order to install jper you need to run
+# pip install -r requirements.txt
+# (i.e. target this file with the -r switch on pip).
+
+# install esprit from submodule directory
+-e esprit/
+
+# install octopus from submodue directory
+-e magnificent-octopus/
+
+# install the Simple-Sword-Server from the submodule directory
+-e Simple-Sword-Server/
+
+# now run the normal setup.py and get all the normal PyPI dependencies from there
+-e .
