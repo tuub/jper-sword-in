@@ -14,7 +14,7 @@ get all the submodules
     git submodule init
     git submodule update
 
-This will initialise and clone the esprit and magnificent octopus libraries
+This will initialise and clone the esprit, magnificent octopus and Simple-Sword-Server libraries
 
 Then get the submodules for Magnificent Octopus
 
@@ -27,12 +27,21 @@ Create your virtualenv and activate it
     virtualenv /path/to/venv
     source /path/tovenv/bin/activate
 
-Install esprit and magnificent octopus (in that order)
+Install Esprit, Magnificent Octopus and Simple-Sword-Server (in that order)
+
+To do them all as one, use
+
+    pip install -r requirements.txt
+
+or to do them individually use
 
     cd myapp/esprit
     pip install -e .
     
     cd myapp/magnificent-octopus
+    pip install -e .
+    
+    cd Simple-Sword-Server
     pip install -e .
     
 Create your local config
@@ -51,7 +60,4 @@ Then, start your app with
 
     python service/web.py
 
-If you want to specify your own root config file, you can use
-
-    APP_CONFIG=path/to/rootcfg.py python service/web.py
     
