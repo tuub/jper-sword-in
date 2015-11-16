@@ -81,12 +81,12 @@ SWORDV2_SERVER_CONFIG = {
 
     # What packaging formats should the sword:acceptPackaging element in the Service Document support
     "sword_accept_package" : [
-        "http://router.jisc.ac.uk/packages/FilesAndJATS"
+        "https://pubrouter.jisc.ac.uk/FilesAndJATS"
     ],
 
     # list of package formats that SSS can provide when retrieving the Media Resource
     "sword_disseminate_package" : [
-        "http://router.jisc.ac.uk/packages/FilesAndJATS"
+        "https://pubrouter.jisc.ac.uk/FilesAndJATS"
     ],
 
     # The acceptable formats that the server can return the media resource in
