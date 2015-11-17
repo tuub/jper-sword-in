@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>service.sword.JperSword</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="https://github.com/JiscPER/jper-sword-in">Jisc Publications Router - SWORDv2 deposit endpoint</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="service-module.html">Package&nbsp;service</a> ::
+        <a href="service.sword-module.html">Module&nbsp;sword</a> ::
+        Class&nbsp;JperSword
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="service.sword.JperSword-class.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<!-- ==================== CLASS DESCRIPTION ==================== -->
+<h1 class="epydoc">Class JperSword</h1><p class="nomargin-top"><span class="codelink"><a href="service.sword-pysrc.html#JperSword">source&nbsp;code</a></span></p>
+<center>
+<center>  <map id="uml_class_diagram_for_service__5" name="uml_class_diagram_for_service__5">
+<area shape="rect" id="node1_14" href="service.sword.JperSword-class.html#__init__" title="service.sword.JperSword.__init__" alt="" coords="17,39,323,59"/>
+<area shape="rect" id="node1_15" href="service.sword.JperSword-class.html#container_exists" title="service.sword.JperSword.container_exists" alt="" coords="17,59,323,79"/>
+<area shape="rect" id="node1_16" href="service.sword.JperSword-class.html#media_resource_exists" title="service.sword.JperSword.media_resource_exists" alt="" coords="17,79,323,99"/>
+<area shape="rect" id="node1_17" href="service.sword.JperSword-class.html#service_document" title="Construct the Service Document. &#160;This takes the set of collections that are in the store, and places them in an Atom Service document as the individual entries" alt="" coords="17,99,323,119"/>
+<area shape="rect" id="node1_18" href="service.sword.JperSword-class.html#deposit_new" title="Take the supplied deposit and treat it as a new container with content to be created in the specified collection Args: &#45;path: &#160;&#160;&#160;the ID of the collection to be deposited into &#45;deposit: &#160;&#160;&#160;&#160;&#160;&#160;the DepositRequest object to be processed Returns a DepositResponse object which will contain the Deposit Receipt or a SWORD Error" alt="" coords="17,119,323,139"/>
+<area shape="rect" id="node1_19" href="service.sword.JperSword-class.html#get_media_resource" title="Get a representation of the media resource for the given id as represented by the specified content type &#45;id: &#160;&#160;&#160;The ID of the object in the store &#45;content_type &#160;&#160;A ContentType object describing the type of the object to be retrieved" alt="" coords="17,139,323,159"/>
+<area shape="rect" id="node1_20" href="service.sword.JperSword-class.html#get_container" title="Get a representation of the container in the requested content type Args: &#45;path: &#160;&#160;The ID of the object in the store &#45;accept_parameters &#160;&#160;An AcceptParameters object describing the required format Returns a representation of the container in the appropriate format" alt="" coords="17,159,323,179"/>
+<area shape="rect" id="node1_21" href="service.sword.JperSword-class.html#get_statement" title="service.sword.JperSword.get_statement" alt="" coords="17,179,323,199"/>
+<area shape="rect" id="node1_22" href="service.sword.JperSword-class.html#list_collection" title="List the contents of a collection identified by the supplied id" alt="" coords="17,199,323,219"/>
+<area shape="rect" id="node1_23" href="service.sword.JperSword-class.html#replace" title="Replace all the content represented by the supplied id with the supplied deposit Args: &#45; oid: &#160;the object ID in the store &#45; deposit: &#160;a DepositRequest object Return a DepositResponse containing the Deposit Receipt or a SWORD Error" alt="" coords="17,219,323,239"/>
+<area shape="rect" id="node1_24" href="service.sword.JperSword-class.html#delete_content" title="Delete all of the content from the object identified by the supplied id. &#160;the parameters of the delete request must also be supplied &#45; oid: &#160;The ID of the object to delete the contents of &#45; delete: &#160;&#160;The DeleteRequest object Return a DeleteResponse containing the Deposit Receipt or the SWORD Error" alt="" coords="17,239,323,259"/>
+<area shape="rect" id="node1_25" href="service.sword.JperSword-class.html#add_content" title="Take the supplied deposit and treat it as a new container with content to be created in the specified collection Args: &#45;collection: &#160;&#160;&#160;the ID of the collection to be deposited into &#45;deposit: &#160;&#160;&#160;&#160;&#160;&#160;the DepositRequest object to be processed Returns a DepositResponse object which will contain the Deposit Receipt or a SWORD Error" alt="" coords="17,259,323,279"/>
+<area shape="rect" id="node1_26" href="service.sword.JperSword-class.html#deposit_existing" title="Deposit the incoming content into an existing object as identified by the supplied identifier Args: &#45;oid: &#160;&#160;The ID of the object we are depositing into &#45;deposit: &#160;&#160;The DepositRequest object Returns a DepositResponse containing the Deposit Receipt or a SWORD Error" alt="" coords="17,279,323,299"/>
+<area shape="rect" id="node1_27" href="service.sword.JperSword-class.html#delete_container" title="Delete the entire object in the store Args: &#45;oid: &#160;&#160;The ID of the object in the store &#45;delete: &#160;&#160;&#160;The DeleteRequest object Return a DeleteResponse object with may contain a SWORD Error document or nothing at all" alt="" coords="17,299,323,319"/>
+<area shape="rect" id="node1" href="service.sword.JperSword-class.html" title="service.sword.JperSword" alt="" coords="5,5,334,325"/>
+</map>
+  <img src="uml_class_diagram_for_service__5.gif" alt='' usemap="#uml_class_diagram_for_service__5" ismap="ismap" class="graph-without-title" />
+</center>
+</center>
+<hr />
+<!-- ==================== INSTANCE METHODS ==================== -->
+<a name="section-InstanceMethods"></a>
+<table class="summary" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Instance Methods</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-InstanceMethods"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__init__"></a><span class="summary-sig-name">__init__</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">config</span>,
+        <span class="summary-sig-arg">auth</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="service.sword-pysrc.html#JperSword.__init__">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="container_exists"></a><span class="summary-sig-name">container_exists</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">path</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="service.sword-pysrc.html#JperSword.container_exists">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="media_resource_exists"></a><span class="summary-sig-name">media_resource_exists</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">path</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="service.sword-pysrc.html#JperSword.media_resource_exists">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="service_document"></a><span class="summary-sig-name">service_document</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">path</span>=<span class="summary-sig-default">None</span>)</span><br />
+      Construct the Service Document.  This takes the set of collections that are in the store, and places them in
+an Atom Service document as the individual entries</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="service.sword-pysrc.html#JperSword.service_document">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="deposit_new"></a><span class="summary-sig-name">deposit_new</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">path</span>,
+        <span class="summary-sig-arg">deposit</span>)</span><br />
+      Take the supplied deposit and treat it as a new container with content to be created in the specified collection
+Args:
+-path:    the ID of the collection to be deposited into
+-deposit:       the DepositRequest object to be processed
+Returns a DepositResponse object which will contain the Deposit Receipt or a SWORD Error</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="service.sword-pysrc.html#JperSword.deposit_new">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="get_media_resource"></a><span class="summary-sig-name">get_media_resource</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">path</span>,
+        <span class="summary-sig-arg">accept_parameters</span>)</span><br />
+      Get a representation of the media resource for the given id as represented by the specified content type
+-id:    The ID of the object in the store
+-content_type   A ContentType object describing the type of the object to be retrieved</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="service.sword-pysrc.html#JperSword.get_media_resource">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="get_container"></a><span class="summary-sig-name">get_container</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">path</span>,
+        <span class="summary-sig-arg">accept_parameters</span>)</span><br />
+      Get a representation of the container in the requested content type
+Args:
+-path:   The ID of the object in the store
+-accept_parameters   An AcceptParameters object describing the required format
+Returns a representation of the container in the appropriate format</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="service.sword-pysrc.html#JperSword.get_container">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="get_statement"></a><span class="summary-sig-name">get_statement</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">path</span>,
+        <span class="summary-sig-arg">type</span>=<span class="summary-sig-default">None</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="service.sword-pysrc.html#JperSword.get_statement">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_cache_notification"></a><span class="summary-sig-name">_cache_notification</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">path</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="service.sword-pysrc.html#JperSword._cache_notification">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_make_receipt"></a><span class="summary-sig-name">_make_receipt</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">id</span>,
+        <span class="summary-sig-arg">packaging</span>,
+        <span class="summary-sig-arg">treatment</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="service.sword-pysrc.html#JperSword._make_receipt">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="_get_deposit_receipt"></a><span class="summary-sig-name">_get_deposit_receipt</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">path</span>)</span></td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="service.sword-pysrc.html#JperSword._get_deposit_receipt">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="list_collection"></a><span class="summary-sig-name">list_collection</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">path</span>)</span><br />
+      List the contents of a collection identified by the supplied id</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="service.sword-pysrc.html#JperSword.list_collection">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="replace"></a><span class="summary-sig-name">replace</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">path</span>,
+        <span class="summary-sig-arg">deposit</span>)</span><br />
+      Replace all the content represented by the supplied id with the supplied deposit
+Args:
+- oid:  the object ID in the store
+- deposit:  a DepositRequest object
+Return a DepositResponse containing the Deposit Receipt or a SWORD Error</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="service.sword-pysrc.html#JperSword.replace">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="delete_content"></a><span class="summary-sig-name">delete_content</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">path</span>,
+        <span class="summary-sig-arg">delete</span>)</span><br />
+      Delete all of the content from the object identified by the supplied id.  the parameters of the delete
+request must also be supplied
+- oid:  The ID of the object to delete the contents of
+- delete:   The DeleteRequest object
+Return a DeleteResponse containing the Deposit Receipt or the SWORD Error</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="service.sword-pysrc.html#JperSword.delete_content">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="add_content"></a><span class="summary-sig-name">add_content</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">path</span>,
+        <span class="summary-sig-arg">deposit</span>)</span><br />
+      Take the supplied deposit and treat it as a new container with content to be created in the specified collection
+Args:
+-collection:    the ID of the collection to be deposited into
+-deposit:       the DepositRequest object to be processed
+Returns a DepositResponse object which will contain the Deposit Receipt or a SWORD Error</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="service.sword-pysrc.html#JperSword.add_content">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="deposit_existing"></a><span class="summary-sig-name">deposit_existing</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">path</span>,
+        <span class="summary-sig-arg">deposit</span>)</span><br />
+      Deposit the incoming content into an existing object as identified by the supplied identifier
+Args:
+-oid:   The ID of the object we are depositing into
+-deposit:   The DepositRequest object
+Returns a DepositResponse containing the Deposit Receipt or a SWORD Error</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="service.sword-pysrc.html#JperSword.deposit_existing">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="delete_container"></a><span class="summary-sig-name">delete_container</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">path</span>,
+        <span class="summary-sig-arg">delete</span>)</span><br />
+      Delete the entire object in the store
+Args:
+-oid:   The ID of the object in the store
+-delete:    The DeleteRequest object
+Return a DeleteResponse object with may contain a SWORD Error document or nothing at all</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="service.sword-pysrc.html#JperSword.delete_container">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+</table>
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="https://github.com/JiscPER/jper-sword-in">Jisc Publications Router - SWORDv2 deposit endpoint</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Tue Nov 17 10:17:54 2015
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>
