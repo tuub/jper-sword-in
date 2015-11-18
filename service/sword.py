@@ -1,26 +1,53 @@
+"""
+SWORDv2 API implementation for SSS
+
+This provides an implenentation of sss.core.SwordServer and related support classes which implements the features that are used by this
+module.
+"""
+
 from sss.core import SwordServer, ServiceDocument, SDCollection, SwordError, Authenticator, Auth, DepositResponse, EntryDocument, Statement, MediaResourceResponse
 from sss.spec import Errors
 from flask import url_for
 from octopus.modules.jper import client, models
 
 class JperAuth(Auth):
-
+    """
+    Implementation of the sss.core.Auth class, which represents the authentication information
+    (username, password, on-behalf-of user).
+    """
     def __init__(self, username=None, on_behalf_of=None, password=None):
         super(JperAuth, self).__init__(username=username, on_behalf_of=on_behalf_of)
         self.password = password
 
 class JperAuthenticator(Authenticator):
-
+    """
+    Implementation of the sss.core.Authenticator class, which provides a hook for basic authentication
+    to be implemented
+    """
     def __init__(self, config):
         super(JperAuthenticator, self).__init__(config)
 
     def basic_authenticate(self, username, password, obo):
+        """
+        Basic authenticate the user.  Though in reality this does nothing.
+
+        Since the actual authentication will be done at JPER rather than here, all we need to do
+        is create a JperAuth object and let that service bounce the response if the creds are wrong
+
+        :param username:    the username
+        :param password: the password
+        :param obo: not used - here for method sig compliance on superclass
+        :return: a JperAuth object representing these
+        """
         # we don't even attempt to auth the user, just let the
         # JPER API do that
         return JperAuth(username, obo, password)
 
 class JperSword(SwordServer):
-
+    """
+    Implementation of the sss.core.SwordServer which provides implementations only for the methods
+    supported by JPER
+    """
     def __init__(self, config, auth):
         super(JperSword, self).__init__(config, auth)
 
@@ -37,9 +64,25 @@ class JperSword(SwordServer):
     ## Methods required by the JPER integration
 
     def container_exists(self, path):
+        """
+        Does the url path provided refer to a notification that already exists?
+
+        Note that this queries the JPER API and caches a copy of the notification
+
+        :param path: url path (e.g. the notification id)
+        :return: True if the notification exists, False if not
+        """
         return self._cache_notification(path)
 
     def media_resource_exists(self, path):
+        """
+        Does the media resource (content file) as referenced by the url path exist
+
+        Note that this queries the JPER API and caches a copy of the notification
+
+        :param path: url path for the notification content file
+        :return: True if the file exists, False if not
+        """
         cached = self._cache_notification(path)
         if not cached:
             return False
@@ -53,8 +96,13 @@ class JperSword(SwordServer):
 
     def service_document(self, path=None):
         """
-        Construct the Service Document.  This takes the set of collections that are in the store, and places them in
+        Construct the Service Document for JPER.  This takes the set of collections that are in the store, and places them in
         an Atom Service document as the individual entries
+
+        This will provide two collections for deposit: one for validation requests and the other for create requests.
+
+        :param path: url path sent to the server (for supporting sub-service documents, which we don't in this implementation)
+        :return: serialised service document
         """
         service = ServiceDocument(version=self.configuration.sword_version,
                                     max_upload_size=self.configuration.max_upload_size)
@@ -101,11 +149,11 @@ class JperSword(SwordServer):
 
     def deposit_new(self, path, deposit):
         """
-        Take the supplied deposit and treat it as a new container with content to be created in the specified collection
-        Args:
-        -path:    the ID of the collection to be deposited into
-        -deposit:       the DepositRequest object to be processed
-        Returns a DepositResponse object which will contain the Deposit Receipt or a SWORD Error
+        Take the supplied deposit and treat it as a new container with content to be created in the specified collection path
+
+        :param path:    the ID of the collection to be deposited into
+        :param deposit:       the DepositRequest object to be processed
+        :return: a DepositResponse object which will contain the Deposit Receipt or a SWORD Error
         """
         # make a notification that we can use to go along with the deposit
         # it doesn't need to contain anything
@@ -157,8 +205,10 @@ class JperSword(SwordServer):
     def get_media_resource(self, path, accept_parameters):
         """
         Get a representation of the media resource for the given id as represented by the specified content type
-        -id:    The ID of the object in the store
-        -content_type   A ContentType object describing the type of the object to be retrieved
+
+        :param id:    The ID of the object in the store
+        :param content_type   A ContentType object describing the type of the object to be retrieved
+        :return: the media resource wrapped in a MediaResourceResponse object
         """
         cached = self._cache_notification(path)
         if not cached:
@@ -180,10 +230,10 @@ class JperSword(SwordServer):
     def get_container(self, path, accept_parameters):
         """
         Get a representation of the container in the requested content type
-        Args:
-        -path:   The ID of the object in the store
-        -accept_parameters   An AcceptParameters object describing the required format
-        Returns a representation of the container in the appropriate format
+
+        :param path:   The ID of the object in the store
+        :param accept_parameters:   An AcceptParameters object describing the required format
+        :return: a representation of the container in the appropriate format
         """
         # by the time this is called, we should already know that we can return this type, so there is no need for
         # any checking, we just get on with it
@@ -195,6 +245,13 @@ class JperSword(SwordServer):
             return self.get_statement(path, accept_parameters.content_type.mimetype())
 
     def get_statement(self, path, type=None):
+        """
+        Get a representation of the container and its current state as a sword statement
+
+        :param path: the id of the object in the store
+        :param type: the mimetype of statement to return
+        :return: a serialised statement in the appropriate format
+        """
         if type is None:
             type = "application/atom+xml;type=feed"
 
@@ -244,6 +301,13 @@ class JperSword(SwordServer):
     ## some internal methods
 
     def _cache_notification(self, path):
+        """
+        Get a copy of the notification specified by the path, and store a copy of it
+        in memory for fast access later
+
+        :param path:
+        :return: True if exists, False if not
+        """
         # if we haven't got a cached copy, get one
         if path not in self.notes:
             note = self.jper.get_notification(notification_id=path)
@@ -255,6 +319,14 @@ class JperSword(SwordServer):
         return True
 
     def _make_receipt(self, id, packaging, treatment):
+        """
+        Create an EntryDocument representing the notification with the specified identifier, packaging and treatment
+
+        :param id: id of the notification
+        :param packaging: packaging format of any associated binary content
+        :param treatment: human readable text explaining what we did to the notification on ingest
+        :return: an EntryDocument suitable for use as a deposit reciept
+        """
         receipt = EntryDocument()
         receipt.atom_id = self.um.atom_id(id)
         receipt.content_uri = self.um.cont_uri(id)
@@ -268,6 +340,12 @@ class JperSword(SwordServer):
         return receipt
 
     def _get_deposit_receipt(self, path):
+        """
+        Get a deposit receipt for the notificiation identified by the path
+
+        :param path: notification id
+        :return: serialised deposit receipt
+        """
         cached = self._cache_notification(path)
         if not cached:
             raise SwordError(status=404, empty=True)
@@ -287,57 +365,37 @@ class JperSword(SwordServer):
 
     def list_collection(self, path):
         """
-        List the contents of a collection identified by the supplied id
+        NOT IMPLEMENTED
         """
         raise NotImplementedError()
 
     def replace(self, path, deposit):
         """
-        Replace all the content represented by the supplied id with the supplied deposit
-        Args:
-        - oid:  the object ID in the store
-        - deposit:  a DepositRequest object
-        Return a DepositResponse containing the Deposit Receipt or a SWORD Error
+        NOT IMPLEMENTED
         """
         raise NotImplementedError()
 
     def delete_content(self, path, delete):
         """
-        Delete all of the content from the object identified by the supplied id.  the parameters of the delete
-        request must also be supplied
-        - oid:  The ID of the object to delete the contents of
-        - delete:   The DeleteRequest object
-        Return a DeleteResponse containing the Deposit Receipt or the SWORD Error
+        NOT IMPLEMENTED
         """
         raise NotImplementedError()
 
     def add_content(self, path, deposit):
         """
-        Take the supplied deposit and treat it as a new container with content to be created in the specified collection
-        Args:
-        -collection:    the ID of the collection to be deposited into
-        -deposit:       the DepositRequest object to be processed
-        Returns a DepositResponse object which will contain the Deposit Receipt or a SWORD Error
+        NOT IMPLEMENTED
         """
         raise NotImplementedError()
 
     def deposit_existing(self, path, deposit):
         """
-        Deposit the incoming content into an existing object as identified by the supplied identifier
-        Args:
-        -oid:   The ID of the object we are depositing into
-        -deposit:   The DepositRequest object
-        Returns a DepositResponse containing the Deposit Receipt or a SWORD Error
+        NOT IMPLEMENTED
         """
         raise NotImplementedError()
 
     def delete_container(self, path, delete):
         """
-        Delete the entire object in the store
-        Args:
-        -oid:   The ID of the object in the store
-        -delete:    The DeleteRequest object
-        Return a DeleteResponse object with may contain a SWORD Error document or nothing at all
+        NOT IMPLEMENTED
         """
         raise NotImplementedError()
 
@@ -350,31 +408,74 @@ class URIManager(object):
         self.configuration = config
 
     def atom_id(self, id):
-        """ An ID to use for Atom Entries """
+        """
+        Format the notification ID to use for Atom Entries
+
+        :param id: the notification id
+        :return: a tag identifier for use in atom
+        """
         return "tag:container@jper/" + id
 
     def sd_uri(self):
+        """
+        Get the service document URL
+
+        :return: the url for the service doc
+        """
         return self.configuration.base_url[:-1] + url_for("swordv2_server.service_document")
 
     def col_uri(self, id):
-        """ The url for a collection on the server """
+        """
+        The url for a collection on the server
+
+        :param id: the id of the collection (validate/notify)
+        :return: the url to the collection
+        """
         return self.configuration.base_url[:-1] + url_for("swordv2_server.collection", collection_id=id)
 
     def edit_uri(self, id):
-        """ The Edit-URI """
+        """
+        The Edit-URI for a notification
+
+        :param id: the id of the notification
+        :return: the url for the container
+        """
         return self.configuration.base_url[:-1] + url_for("swordv2_server.entry", entry_id=id)
 
     def em_uri(self, id):
-        """ The EM-URI """
+        """
+        The EM-URI for the notification
+
+        :param id: the id of the notification
+        :return: the url for media resource in the container
+        """
         return self.configuration.base_url[:-1] + url_for("swordv2_server.content", entry_id=id)
 
     def cont_uri(self, id):
-        """ The Cont-URI """
+        """
+        The Cont-URI for the notification
+
+        :param id: the id of the notification
+        :return: the url for content identifier in the container
+        """
         return self.em_uri(id)
 
     def state_uri(self, id, type):
+        """
+        The Statement URL for the notification
+
+        :param id: the id of the notification
+        :param type: the type of statement (e.g. atom/rdf)
+        :return: the url for the statment
+        """
         return self.configuration.base_url[:-1] + url_for("swordv2_server.statement", entry_id=id, type=type)
 
     def agg_uri(self, id):
+        """
+        Aggregation Tag URI for use in RDF statement
+
+        :param id: id of the notification
+        :return: tag uri for use in RDF graphs
+        """
         return "tag:aggregation@jper/" + id
 

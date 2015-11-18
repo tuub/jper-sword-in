@@ -1,3 +1,14 @@
+"""
+Main module from which the application is started and the web interface mounted
+
+To start the application directly using the python web server, you can just do
+
+::
+
+    python web.py
+
+Refer to server installation documentation for more details how to deploy in production.
+"""
 from octopus.core import app, initialise, add_configuration
 
 if __name__ == "__main__":
@@ -24,16 +35,6 @@ if __name__ == "__main__":
 
 # most of the imports should be done here, after initialise()
 from flask import render_template
-from octopus.lib.webapp import custom_static
-
-@app.route("/")
-def root():
-    return render_template("index.html")
-
-# this allows us to override the standard static file handling with our own dynamic version
-@app.route("/static/<path:filename>")
-def static(filename):
-    return custom_static(filename)
 
 from octopus.modules.swordv2.swordv2_server import blueprint as swordv2
 app.register_blueprint(swordv2)

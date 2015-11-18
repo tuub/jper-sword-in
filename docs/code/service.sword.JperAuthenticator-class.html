@@ -60,15 +60,18 @@
 <!-- ==================== CLASS DESCRIPTION ==================== -->
 <h1 class="epydoc">Class JperAuthenticator</h1><p class="nomargin-top"><span class="codelink"><a href="service.sword-pysrc.html#JperAuthenticator">source&nbsp;code</a></span></p>
 <center>
-<center>  <map id="uml_class_diagram_for_service__4" name="uml_class_diagram_for_service__4">
+<center>  <map id="uml_class_diagram_for_service__2" name="uml_class_diagram_for_service__2">
 <area shape="rect" id="node1_2" href="service.sword.JperAuthenticator-class.html#__init__" title="service.sword.JperAuthenticator.__init__" alt="" coords="17,39,321,59"/>
-<area shape="rect" id="node1_3" href="service.sword.JperAuthenticator-class.html#basic_authenticate" title="service.sword.JperAuthenticator.basic_authenticate" alt="" coords="17,59,321,79"/>
-<area shape="rect" id="node1" href="service.sword.JperAuthenticator-class.html" title="service.sword.JperAuthenticator" alt="" coords="5,5,333,85"/>
+<area shape="rect" id="node1_3" href="service.sword.JperAuthenticator-class.html#basic_authenticate" title="Basic authenticate the user. &#160;Though in reality this does nothing." alt="" coords="17,59,321,79"/>
+<area shape="rect" id="node1" href="service.sword.JperAuthenticator-class.html" title="Implementation of the sss.core.Authenticator class, which provides a hook for basic authentication to be implemented" alt="" coords="5,5,333,85"/>
 </map>
-  <img src="uml_class_diagram_for_service__4.gif" alt='' usemap="#uml_class_diagram_for_service__4" ismap="ismap" class="graph-without-title" />
+  <img src="uml_class_diagram_for_service__2.gif" alt='' usemap="#uml_class_diagram_for_service__2" ismap="ismap" class="graph-without-title" />
 </center>
 </center>
 <hr />
+Implementation of the sss.core.Authenticator class, which provides a hook for basic authentication
+to be implemented
+
 <!-- ==================== INSTANCE METHODS ==================== -->
 <a name="section-InstanceMethods"></a>
 <table class="summary" border="1" cellpadding="3"
@@ -109,10 +112,11 @@
     </td><td class="summary">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td><span class="summary-sig"><a name="basic_authenticate"></a><span class="summary-sig-name">basic_authenticate</span>(<span class="summary-sig-arg">self</span>,
+          <td><span class="summary-sig"><a href="service.sword.JperAuthenticator-class.html#basic_authenticate" class="summary-sig-name">basic_authenticate</a>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">username</span>,
         <span class="summary-sig-arg">password</span>,
-        <span class="summary-sig-arg">obo</span>)</span></td>
+        <span class="summary-sig-arg">obo</span>)</span><br />
+      Basic authenticate the user.  Though in reality this does nothing.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="service.sword-pysrc.html#JperAuthenticator.basic_authenticate">source&nbsp;code</a></span>
             
@@ -123,6 +127,57 @@
     </td>
   </tr>
 </table>
+<!-- ==================== METHOD DETAILS ==================== -->
+<a name="section-MethodDetails"></a>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="table-header">
+  <td colspan="2" class="table-header">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+      <tr valign="top">
+        <td align="left"><span class="table-header">Method Details</span></td>
+        <td align="right" valign="top"
+         ><span class="options">[<a href="#section-MethodDetails"
+         class="privatelink" onclick="toggle_private();"
+         >hide private</a>]</span></td>
+      </tr>
+    </table>
+  </td>
+</tr>
+</table>
+<a name="basic_authenticate"></a>
+<div>
+<table class="details" border="1" cellpadding="3"
+       cellspacing="0" width="100%" bgcolor="white">
+<tr><td>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr valign="top"><td>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">basic_authenticate</span>(<span class="sig-arg">self</span>,
+        <span class="sig-arg">username</span>,
+        <span class="sig-arg">password</span>,
+        <span class="sig-arg">obo</span>)</span>
+  </h3>
+  </td><td align="right" valign="top"
+    ><span class="codelink"><a href="service.sword-pysrc.html#JperAuthenticator.basic_authenticate">source&nbsp;code</a></span>&nbsp;
+    </td>
+  </tr></table>
+  
+  <p>Basic authenticate the user.  Though in reality this does nothing.</p>
+<p>Since the actual authentication will be done at JPER rather than here, all we need to do
+is create a JperAuth object and let that service bounce the response if the creds are wrong</p>
+  <dl class="fields">
+    <dt>Parameters:</dt>
+    <dd><ul class="nomargin-top">
+        <li><strong class="pname"><code>username</code></strong> - the username</li>
+        <li><strong class="pname"><code>password</code></strong> - the password</li>
+        <li><strong class="pname"><code>obo</code></strong> - not used - here for method sig compliance on superclass</li>
+    </ul></dd>
+    <dt>Returns:</dt>
+        <dd>a JperAuth object representing these</dd>
+  </dl>
+</td></tr></table>
+</div>
+<br />
 <!-- ==================== NAVIGATION BAR ==================== -->
 <table class="navbar" border="0" width="100%" cellpadding="0"
        bgcolor="#a0c0ff" cellspacing="0">
@@ -151,7 +206,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Tue Nov 17 10:17:54 2015
+    Generated by Epydoc 3.0.1 on Wed Nov 18 07:47:12 2015
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
