@@ -6,4 +6,4 @@
 	url = https://github.com/JiscPER/magnificent-octopus
 [submodule "Simple-Sword-Server"]
 	path = Simple-Sword-Server
-	url = https://github.com/swordapp/Simple-Sword-Server.git
+	url = https://github.com/JiscPER/Simple-Sword-Server.git
