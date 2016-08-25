@@ -1,9 +1,12 @@
 [submodule "esprit"]
 	path = esprit
 	url = git@github.com:OA-DeepGreen/esprit.git
+	branch = master
 [submodule "magnificent-octopus"]
 	path = magnificent-octopus
 	url = git@github.com:OA-DeepGreen/magnificent-octopus.git
+	branch = master
 [submodule "Simple-Sword-Server"]
 	path = Simple-Sword-Server
 	url = git@github.com:OA-DeepGreen/Simple-Sword-Server.git
+	branch = master
