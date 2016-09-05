@@ -47,7 +47,7 @@ SECRET_KEY = "super-secret-key"
 ## JPER Client information
 
 # Base URL for requests to the JPER API
-JPER_BASE_URL = "http://router.jisc.ac.uk/api/v1"
+JPER_BASE_URL = "http://oa-deepgreen.kobv.de/api/v1"
 """API base url for communicating with JPER"""
 
 # API key to use for authenticated requests against JPER API
@@ -101,12 +101,12 @@ SWORDV2_SERVER_CONFIG = {
 
     # What packaging formats should the sword:acceptPackaging element in the Service Document support
     "sword_accept_package" : [
-        "https://pubrouter.jisc.ac.uk/FilesAndJATS"
+        "https://datahub.deepgreen.org/FilesAndJATS"
     ],
 
     # list of package formats that SSS can provide when retrieving the Media Resource
     "sword_disseminate_package" : [
-        "https://pubrouter.jisc.ac.uk/FilesAndJATS"
+        "https://datahub.deepgreen.org/FilesAndJATS"
     ],
 
     # The acceptable formats that the server can return the media resource in
@@ -140,7 +140,7 @@ SWORDV2_SERVER_CONFIG = {
         "content_type" : "application/atom+xml;type=entry"
     },
 
-    "generator" : ("http://router.jisc.ac.uk", "2.0"),
+    "generator" : ("http://oa-deepgreen.kobv.de", "2.0"),
 
     ##############################################
     # Default configuration for SSS repository impl - these are not used
