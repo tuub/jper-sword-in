@@ -152,7 +152,9 @@ class JperSword(SwordServer):
             sub_service=[]
         )
 
-        service.add_workspace("JPER", [validate, notify])
+        # service.add_workspace("JPER", [validate, notify])
+        # 2016-10-25 TD : title adjustment of the Service-Document for DeepGreen
+        service.add_workspace("DeepGreen Prototype", [validate, notify])
 
         # serialise and return
         return service.serialise()
