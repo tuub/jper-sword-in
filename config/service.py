@@ -47,7 +47,7 @@ SECRET_KEY = "super-secret-key"
 ## JPER Client information
 
 # Base URL for requests to the JPER API
-JPER_BASE_URL = "http://oa-deepgreen.kobv.de/api/v1"
+JPER_BASE_URL = "http://www.oa-deepgreen.de/api/v1"
 """API base url for communicating with JPER"""
 
 # API key to use for authenticated requests against JPER API
@@ -140,7 +140,7 @@ SWORDV2_SERVER_CONFIG = {
         "content_type" : "application/atom+xml;type=entry"
     },
 
-    "generator" : ("http://oa-deepgreen.kobv.de", "2.0"),
+    "generator" : ("http://www.oa-deepgreen.de", "2.0"),
 
     ##############################################
     # Default configuration for SSS repository impl - these are not used
