@@ -131,7 +131,7 @@ class JperSword(SwordServer):
             multipart_accept=multipart_accept,
             description="Deposit here to validate the format of your notification files",
             accept_package=accept_package,
-            collection_policy="This collection will take any deposit package intended for the Router",
+            collection_policy="This collection will take any deposit package intended for the DeepGreen service",
             mediation=self.configuration.mediation,
             treatment="Packages sent here will be validated, and you will receive an error document or a deposit receipt.  " +
                       "The deposit will not subsequently be stored, so you will not be able to retrieve it again afterwards.",
@@ -145,7 +145,7 @@ class JperSword(SwordServer):
             multipart_accept=multipart_accept,
             description="Deposit here to deliver a publication event notification",
             accept_package=accept_package,
-            collection_policy="This collection will take any deposit package intended for the Router",
+            collection_policy="This collection will take any deposit package intended for the DeepGreen service",
             mediation=self.configuration.mediation,
             treatment="Packages sent here will be analysed for metadata suitable for routing to appropriate repository systems, " +
                       "and then delivered onward.",
