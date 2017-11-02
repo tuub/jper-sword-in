@@ -293,12 +293,12 @@ class JperSword(SwordServer):
 
         # State information
         #state_uri = "http://router2.mimas.ac.uk/swordv2/state/pending"
-        state_uri = "http://datahub.deepgreen.org/sword/state/pending"
+        state_uri = "https://www.oa-deepgreen.de/sword/state/pending"
         state_description = "Notification has been accepted for routing"
         ad = note.analysis_date
         if ad is not None:
             # state_uri = "http://router2.mimas.ac.uk/swordv2/state/routed"
-            state_uri = "http://datahub.deepgreen.org/sword/state/routed"
+            state_uri = "https://www.oa-deepgreen.de/sword/state/routed"
             state_description = "Notification has been routed for appropriate repositories"
 
         # the derived resources/provided links
