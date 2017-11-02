@@ -10,11 +10,11 @@ The API is built on the SWORDv2 specification, which you can [read about here](h
 
 ## Getting Started: retrieving the service document
 
-The Service Document tells you all you need to know about the SWORDv2 endpoint that you're 
-going to be interacting with.
+The Service Document tells you all you need to know about the SWORDv2 endpoint that 
+you're going to be interacting with.
 
-When you start working with the endpoint, you'll probably want to retrieve it to take a look 
-at the server's capabilities, but you won't need it much after that.
+When you start working with the endpoint, you'll probably want to retrieve it to take a 
+look at the server's capabilities, but you won't need it much after that.
 
 The Service Document lists the collections that you can send your notifications to, the 
 mimetypes and the packaging formats that are supported.
@@ -24,7 +24,8 @@ In this version of the system there are only two collections:
 1. validate - you can send content here to check whether it's correctly formatted for sending to the router
 2. notify - you can send content here when you're ready to notify us of a new publication
 
-You'll be able to get the URLs for those collections by retrieving the service document, which you can do like this:
+You'll be able to get the URLs for those collections by retrieving the service document, 
+which you can do like this:
 
     GET /service-document
 
@@ -39,11 +40,12 @@ For example, using curl, you might do the following:
 ## Send a package for validation
 
 Once you have constructed a Zip file of the appropriate packaging format (see the JPER 
-packaging documentation for details),  you'll want to check that it works with the router.  
-You can do this by sending it to the "validate" collection before you try sending it for real.
+packaging documentation for details),  you'll want to check that it works with the 
+router.  You can do this by sending it to the "validate" collection before you try 
+sending it for real.
 
-Get the URL of the collection from the Service Document (in the section above), and then do 
-the following
+Get the URL of the collection from the Service Document (in the section above), and 
+then do the following
 
     POST /collection/validate
     Content-Disposition: filename=filename.zip
@@ -87,10 +89,11 @@ In response to this you will either receive a SWORDv2 error document detailing a
 with the request, or a successful 201 (Created) response.  If you get the former, you should 
 consider sending the package to the "validate" endpoint for a proper check-over.
 
-Along with the successful response you will receive an HTTP header "Location" which gives you 
-the "Edit-IRI" for your notification.  If you want to access your notification again, you'll 
-need this.  You will also get an XML deposit receipt document, which provides you with a 
-variety of other URLs to access parts of your created notification (see below for more details).
+Along with the successful response you will receive an HTTP header "Location" which gives 
+you the "Edit-IRI" for your notification.  If you want to access your notification again, 
+you'll need this.  You will also get an XML deposit receipt document, which provides you 
+with a variety of other URLs to access parts of your created notification (see below for 
+more details).
 
 
 ## Retrieving details of previously created notifications
@@ -128,8 +131,8 @@ to access the binary content and the staus report.
 
 ### Retreiving the binary content
 
-To get the binary content, you need the "Edit Media IRI" from the deposit receipt.  If you 
-don't have the deposit receipt, see the section above on how to get it.
+To get the binary content, you need the "Edit Media IRI" from the deposit receipt.
+If you don't have the deposit receipt, see the section above on how to get it.
 
 In the deposit receipt you'll see a section that looks like this:
 
@@ -150,8 +153,8 @@ This will return to you the binary content you originally deposited.
 
 ### Retrieving the Statement
 
-To get the statement you need the "State-IRI" from the deposit receipt.  If you don't have 
-the deposit receipt, see the section above on how to get it.
+To get the statement you need the "State-IRI" from the deposit receipt. If you 
+don't have the deposit receipt, see the section above on how to get it.
 
 In the deposit receipt you'll see a section that looks like this:
 
@@ -159,8 +162,8 @@ In the deposit receipt you'll see a section that looks like this:
         type="application/atom+xml;type=feed" 
         href="http://www.oa-deepgreen.de/sword/entry/b581851855c7414eaef4d7fd3f49ed50/statement/atom"/>
 
-(there may be more than one of these, as the statement is available in different formats - 
-pick your favourite).
+(there may be more than one of these, as the statement is available in different 
+formats - pick your favourite).
 
 You can then do:
 
