@@ -450,7 +450,7 @@ class URIManager(object):
         :param id: the notification id
         :return: a tag identifier for use in atom
         """
-        return "tag:container@jper/" + id
+        return "tag:container@deepgreen/" + id
 
     def sd_uri(self):
         """
@@ -513,5 +513,5 @@ class URIManager(object):
         :param id: id of the notification
         :return: tag uri for use in RDF graphs
         """
-        return "tag:aggregation@jper/" + id
+        return "tag:aggregation@deepgreen/" + id
 
