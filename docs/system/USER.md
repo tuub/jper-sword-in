@@ -1,7 +1,8 @@
 # JPER SWORDv2 Deposit Endpoint
 
-This application provides a thin interface between the JPER notification API and a publisher's SWORDv2 deposit 
-client, allowing the publisher to interact with JPER via SWORDv2 rather than its native API.
+This application provides a thin interface between the JPER notification API and a publisher's 
+SWORDv2 deposit client, allowing the publisher to interact with JPER via SWORDv2 rather than 
+its native API.
 
 This document tells you all you need to know to get connected to JPER via this approach.
 
@@ -9,13 +10,14 @@ The API is built on the SWORDv2 specification, which you can [read about here](h
 
 ## Getting Started: retrieving the service document
 
-The Service Document tells you all you need to know about the SWORDv2 endpoint that you're going to be interacting with.
+The Service Document tells you all you need to know about the SWORDv2 endpoint that you're 
+going to be interacting with.
 
-When you start working with the endpoint, you'll probably want to retrieve it to take a look at the server's capabilities,
-but you won't need it much after that.
+When you start working with the endpoint, you'll probably want to retrieve it to take a look 
+at the server's capabilities, but you won't need it much after that.
 
-The Service Document lists the collections that you can send your notifications to, the mimetypes and the packaging formats
-that are supported.
+The Service Document lists the collections that you can send your notifications to, the 
+mimetypes and the packaging formats that are supported.
 
 In this version of the system there are only two collections:
 
@@ -36,9 +38,9 @@ For example, using curl, you might do the following:
 
 ## Send a package for validation
 
-Once you have constructed a Zip file of the appropriate packaging format (see the JPER packaging 
-documentation for details),  you'll want to check that it works with the router.  You can do 
-this by sending it to the "validate" collection before you try sending it for real.
+Once you have constructed a Zip file of the appropriate packaging format (see the JPER 
+packaging documentation for details),  you'll want to check that it works with the router.  
+You can do this by sending it to the "validate" collection before you try sending it for real.
 
 Get the URL of the collection from the Service Document (in the section above), and then do 
 the following
@@ -71,7 +73,7 @@ Get the URL of the collection from the Service Document (see above), and then do
     POST /collection/notify
     Content-Disposition: filename=filename.zip
     Content-Type: application/zip
-    Packaging: https://pubsrouter.jisc.ac.uk/FilesAndJATS
+    Packaging: https://datahub.deepgreen.org/FilesAndJATS
     
     [binary content]
 
@@ -79,7 +81,7 @@ This will require you to provide your username and api key via HTTP Basic Authen
 
 For example, using curl, you might do the following:
 
-    curl -i --data-binary "@article.zip" -H "Content-Disposition: filename=article.zip" -H "Content-Type: application/zip" -H "Packaging: https://pubsrouter.jisc.ac.uk/FilesAndJATS" http://userame:api_key@pubsrouter.jisc.ac.uk/sword/collection/notify
+    curl -i --data-binary "@article.zip" -H "Content-Disposition: filename=article.zip" -H "Content-Type: application/zip" -H "Packaging: https://datahub.deepgreen.org/FilesAndJATS" http://userame:api_key@www.oa-deepgreen.de/sword/collection/notify
 
 In response to this you will either receive a SWORDv2 error document detailing any problems 
 with the request, or a successful 201 (Created) response.  If you get the former, you should 
