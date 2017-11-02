@@ -48,7 +48,7 @@ Get the URL of the collection from the Service Document (in the section above), 
 then do the following
 
     POST /collection/validate
-    Content-Disposition: filename=filename.zip
+    Content-Disposition: filename=test.zip
     Content-Type: application/zip
     Packaging: https://datahub.deepgreen.org/FilesAndJATS
     
@@ -73,7 +73,7 @@ to the live "notify" collection for inclusion in the router.
 Get the URL of the collection from the Service Document (see above), and then do the following
 
     POST /collection/notify
-    Content-Disposition: filename=filename.zip
+    Content-Disposition: filename=article.zip
     Content-Type: application/zip
     Packaging: https://datahub.deepgreen.org/FilesAndJATS
     
