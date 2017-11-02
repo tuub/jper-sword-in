@@ -74,6 +74,7 @@ SWORDV2_SERVER_CONFIG = {
     # General server config
 
     # The base url of the webservice where SSS is deployed
+    # 2017-11-02 TD : Mind the trailing '/' in the base_url.  It's important!
     "base_url" : "http://localhost:5025/",
     # if you are using Apache, you should probably use this base_url instead
     # "base_url" : "http://localhost/sss/",
