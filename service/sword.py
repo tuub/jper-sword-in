@@ -364,6 +364,8 @@ class JperSword(SwordServer):
         :return: an EntryDocument suitable for use as a deposit reciept
         """
         receipt = EntryDocument()
+        receipt.dc_metadata["title"] = "DeepGreen Notification"
+        receipt.dc_metadata["creator"] = "DeepGreen Prototyp"
         receipt.atom_id = self.um.atom_id(id)
         receipt.content_uri = self.um.cont_uri(id)
         receipt.edit_uri = self.um.edit_uri(id)
