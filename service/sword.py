@@ -42,7 +42,7 @@ class JperAuthenticator(Authenticator):
         """
         # we don't even attempt to auth the user, just let the
         # JPER API do that
-        app.logger.debug(u"Request received for Basic Auth on Username:{x} - credentials to be forwarded to JPER, not checked here".format(x=username))
+        app.logger.debug("Request received for Basic Auth on Username:{x} - credentials to be forwarded to JPER, not checked here".format(x=username))
         return JperAuth(username, obo, password)
 
 class JperSword(SwordServer):
@@ -74,7 +74,7 @@ class JperSword(SwordServer):
         :param path: url path (e.g. the notification id)
         :return: True if the notification exists, False if not
         """
-        app.logger.info(u"Request received to check existence of Notification:{x}".format(x=path))
+        app.logger.info("Request received to check existence of Notification:{x}".format(x=path))
         return self._cache_notification(path)
 
     def media_resource_exists(self, path):
@@ -86,10 +86,10 @@ class JperSword(SwordServer):
         :param path: url path for the notification content file
         :return: True if the file exists, False if not
         """
-        app.logger.info(u"Request received to check existence of Media Resource for Notification:{x}".format(x=path))
+        app.logger.info("Request received to check existence of Media Resource for Notification:{x}".format(x=path))
         cached = self._cache_notification(path)
         if not cached:
-            app.logger.info(u"Unable to retrieve and cache Notification:{x}".format(x=path))
+            app.logger.info("Unable to retrieve and cache Notification:{x}".format(x=path))
             return False
 
         # get the note from the cache
@@ -98,9 +98,9 @@ class JperSword(SwordServer):
         # a note has a media resource if there is a content link associated with it
         packs = note.get_urls(type="package")
         if len(packs) == 0:
-            app.logger.info(u"No Media Resource available for Notification:{x}".format(x=path))
+            app.logger.info("No Media Resource available for Notification:{x}".format(x=path))
         else:
-            app.logger.info(u"One or more Media Resources found for Notification:{x}".format(x=path))
+            app.logger.info("One or more Media Resources found for Notification:{x}".format(x=path))
         return len(packs) > 0
 
     def service_document(self, path=None):
@@ -113,7 +113,7 @@ class JperSword(SwordServer):
         :param path: url path sent to the server (for supporting sub-service documents, which we don't in this implementation)
         :return: serialised service document
         """
-        app.logger.info(u"Request received for SWORD Service Document")
+        app.logger.info("Request received for SWORD Service Document")
         service = ServiceDocument(version=self.configuration.sword_version,
                                     max_upload_size=self.configuration.max_upload_size)
 
@@ -167,7 +167,7 @@ class JperSword(SwordServer):
         :param deposit:       the DepositRequest object to be processed
         :return: a DepositResponse object which will contain the Deposit Receipt or a SWORD Error
         """
-        app.logger.info(u"Request received to deposit new notification to Location:{x}".format(x=path))
+        app.logger.info("Request received to deposit new notification to Location:{x}".format(x=path))
 
         # make a notification that we can use to go along with the deposit
         # it doesn't need to contain anything
@@ -186,7 +186,7 @@ class JperSword(SwordServer):
             try:
                 jper.validate(notification, file_handle=deposit.content_file)
             except client.JPERAuthException as e:
-                app.logger.debug(u"User provided invalid authentication credentials for JPER")
+                app.logger.debug("User provided invalid authentication credentials for JPER")
                 raise SwordError(status=401, empty=True)
             except client.ValidationException as e:
                 app.logger.debug("Validation failed for user's notification")
@@ -198,7 +198,7 @@ class JperSword(SwordServer):
                 id, loc = jper.create_notification(notification, file_handle=deposit.content_file)
                 receipt = self._make_receipt(id, deposit.packaging, "Notification has been accepted for routing")
             except client.JPERAuthException as e:
-                app.logger.debug(u"User provided invalid authentication credentials for JPER")
+                app.logger.debug("User provided invalid authentication credentials for JPER")
                 raise SwordError(status=401, empty=True)
             except client.ValidationException as e:
                 app.logger.debug("Validation failed for user's notification")
@@ -206,7 +206,7 @@ class JperSword(SwordServer):
             app.logger.debug("Create succeeded on user's notification")
             create = True
         else:
-            app.logger.debug(u"Create request was not made to a valid endpoint")
+            app.logger.debug("Create request was not made to a valid endpoint")
             raise SwordError(status=404, empty=True)
 
         # finally, assemble the deposit response and return
@@ -231,10 +231,10 @@ class JperSword(SwordServer):
         :param content_type   A ContentType object describing the type of the object to be retrieved
         :return: the media resource wrapped in a MediaResourceResponse object
         """
-        app.logger.info(u"Request received to retrieve Media Resource from Notification:{x}".format(x=path))
+        app.logger.info("Request received to retrieve Media Resource from Notification:{x}".format(x=path))
         cached = self._cache_notification(path)
         if not cached:
-            app.logger.debug(u"Unable to retrieve and cache Notification:{x}".format(x=path))
+            app.logger.debug("Unable to retrieve and cache Notification:{x}".format(x=path))
             raise SwordError(status=404, empty=True)
 
         # get the note from the cache
@@ -243,13 +243,13 @@ class JperSword(SwordServer):
         # a note has a media resource if there is a content link associated with it
         packs = note.get_urls(type="package")
         if len(packs) == 0:
-            app.logger.debug(u"No Media Resource associated with Notification:{x}".format(x=path))
+            app.logger.debug("No Media Resource associated with Notification:{x}".format(x=path))
             raise SwordError(status=404, empty=True)
 
         mr = MediaResourceResponse()
         mr.redirect = True
         mr.url = packs[0]
-        app.logger.debug(u"Returned Media Resource:{x}".format(x=packs[0]))
+        app.logger.debug("Returned Media Resource:{x}".format(x=packs[0]))
         return mr
 
     def get_container(self, path, accept_parameters):
@@ -260,17 +260,17 @@ class JperSword(SwordServer):
         :param accept_parameters:   An AcceptParameters object describing the required format
         :return: a representation of the container in the appropriate format
         """
-        app.logger.info(u"Received request to retrieve Notification:{x}".format(x=path))
+        app.logger.info("Received request to retrieve Notification:{x}".format(x=path))
 
         # by the time this is called, we should already know that we can return this type, so there is no need for
         # any checking, we just get on with it
 
         # pick either the deposit receipt or the pure statement to return to the client
         if accept_parameters.content_type.mimetype() == "application/atom+xml;type=entry":
-            app.logger.info(u"Returning deposit receipt for Notification:{x}".format(x=path))
+            app.logger.info("Returning deposit receipt for Notification:{x}".format(x=path))
             return self._get_deposit_receipt(path)
         else:
-            app.logger.info(u"Returning statement for Notification:{x}".format(x=path))
+            app.logger.info("Returning statement for Notification:{x}".format(x=path))
             return self.get_statement(path, accept_parameters.content_type.mimetype())
 
     def get_statement(self, path, type=None):
@@ -283,11 +283,11 @@ class JperSword(SwordServer):
         """
         if type is None:
             type = "application/atom+xml;type=feed"
-        app.logger.info(u"Received request for Statement for Notification:{x} in Mimetype:{y}".format(x=path, y=type))
+        app.logger.info("Received request for Statement for Notification:{x} in Mimetype:{y}".format(x=path, y=type))
 
         cached = self._cache_notification(path)
         if not cached:
-            app.logger.debug(u"Unable to retrieve and cache Notification:{x}".format(x=path))
+            app.logger.debug("Unable to retrieve and cache Notification:{x}".format(x=path))
             raise SwordError(status=404, empty=True)
         note = self.notes[path]
 
@@ -323,13 +323,13 @@ class JperSword(SwordServer):
 
         # now serve the relevant serialisation
         if type == "application/rdf+xml":
-            app.logger.debug(u"Returning RDF/XML Statement for Notification:{x}".format(x=path))
+            app.logger.debug("Returning RDF/XML Statement for Notification:{x}".format(x=path))
             return s.serialise_rdf()
         elif type == "application/atom+xml;type=feed":
-            app.logger.debug(u"Returning ATOM Feed Statement for Notification:{x}".format(x=path))
+            app.logger.debug("Returning ATOM Feed Statement for Notification:{x}".format(x=path))
             return s.serialise_atom()
         else:
-            app.logger.debug(u"Mimetype unrecognised, so not returning Statement for Notification:{x}".format(x=path))
+            app.logger.debug("Mimetype unrecognised, so not returning Statement for Notification:{x}".format(x=path))
             return None
 
 
